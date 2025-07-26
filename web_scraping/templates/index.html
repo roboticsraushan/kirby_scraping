@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Campaign Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background: #e3f2fd;
+        }
+        .upload-area.dragover {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .progress-container {
+            display: none;
+        }
+        .log-container {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .log-success { background: #d4edda; color: #155724; }
+        .log-error { background: #f8d7da; color: #721c24; }
+        .log-warning { background: #fff3cd; color: #856404; }
+        .log-info { background: #d1ecf1; color: #0c5460; }
+        .template-preview {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .contact-preview {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .btn-campaign {
+            min-width: 120px;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-running { background: #28a745; }
+        .status-stopped { background: #dc3545; }
+        .status-idle { background: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">
+                    <i class="fas fa-envelope-open-text text-primary"></i>
+                    Email Campaign Manager
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- File Upload Section -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-upload"></i> Upload Contacts</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                            <h5>Drop your CSV file here</h5>
+                            <p class="text-muted">or click to browse</p>
+                            <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                            <button class="btn btn-primary" onclick="document.getElementById('csvFile').click()">
+                                <i class="fas fa-folder-open"></i> Choose File
+                            </button>
+                        </div>
+                        
+                        <div id="fileInfo" class="mt-3" style="display: none;">
+                            <div class="alert alert-success">
+                                <h6><i class="fas fa-check-circle"></i> File Uploaded Successfully</h6>
+                                <p class="mb-1"><strong>File:</strong> <span id="fileName"></span></p>
+                                <p class="mb-1"><strong>Contacts:</strong> <span id="contactCount"></span></p>
+                                <p class="mb-0"><strong>Columns:</strong> <span id="columnList"></span></p>
+                            </div>
+                            
+                            <div id="contactPreview" class="contact-preview">
+                                <h6>Contact Preview:</h6>
+                                <div id="previewContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Template Section -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-edit"></i> Email Template</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Template:</label>
+                            <select class="form-select" id="templateSelect">
+                                <option value="kirby_partnership">Partnership Outreach</option>
+                                <option value="kirby_networking">Networking</option>
+                                <option value="kirby_business_development">Business Development</option>
+                                <option value="custom">Custom Template</option>
+                            </select>
+                        </div>
+
+                        <!-- Business Information Section -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6><i class="fas fa-building"></i> Business Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Business Description:</label>
+                                            <textarea class="form-control" id="businessDescription" rows="3" placeholder="Describe your business, services, or value proposition...">We specialize in robotics automation solutions and innovative technology partnerships.</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Company Name:</label>
+                                            <input type="text" class="form-control" id="companyName" placeholder="Your company name" value="Nolon AI">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Sender Name:</label>
+                                            <input type="text" class="form-control" id="senderName" placeholder="Your name" value="Raushan">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone Number:</label>
+                                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Your phone number" value="+1 (555) 123-4567">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Website:</label>
+                                            <input type="url" class="form-control" id="website" placeholder="https://yourwebsite.com" value="https://nolon.ai">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Subject Line:</label>
+                            <input type="text" class="form-control" id="subjectLine" placeholder="Email subject...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Body:</label>
+                            <textarea class="form-control" id="emailBody" rows="8" placeholder="Email content..."></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Available Placeholders:</label>
+                            <div class="small text-muted">
+                                <code>{name}</code> - Contact name<br>
+                                <code>{store_name}</code> - Store/service center name<br>
+                                <code>{sender_name}</code> - Your name<br>
+                                <code>{business_description}</code> - Your business description<br>
+                                <code>{company_name}</code> - Your company name<br>
+                                <code>{phone_number}</code> - Your phone number<br>
+                                <code>{website}</code> - Your website
+                            </div>
+                        </div>
+
+                        <div id="templatePreview" class="template-preview" style="display: none;">
+                            <h6>Template Preview:</h6>
+                            <div id="previewSubject" class="mb-2"></div>
+                            <div id="previewBody"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Control Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-rocket"></i> Campaign Control</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="status-indicator" id="statusIndicator"></span>
+                                    <span id="statusText">Ready to start campaign</span>
+                                </div>
+                                
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-success btn-campaign" id="startBtn" onclick="startCampaign()">
+                                        <i class="fas fa-play"></i> Start Campaign
+                                    </button>
+                                    <button class="btn btn-danger btn-campaign" id="stopBtn" onclick="stopCampaign()" style="display: none;">
+                                        <i class="fas fa-stop"></i> Stop Campaign
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="progress-container" id="progressContainer">
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="h5 mb-0" id="sentCount">0</div>
+                                            <small class="text-muted">Sent</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="h5 mb-0" id="failedCount">0</div>
+                                            <small class="text-muted">Failed</small>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="h5 mb-0" id="totalCount">0</div>
+                                            <small class="text-muted">Total</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Logs Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list"></i> Campaign Logs</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="log-container" id="logContainer">
+                            <div class="text-muted text-center">No logs yet...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentFile = null;
+        let templates = {};
+        let statusInterval = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTemplates();
+            setupFileUpload();
+            setupTemplatePreview();
+        });
+
+        // Load email templates
+        async function loadTemplates() {
+            try {
+                const response = await fetch('/templates');
+                templates = await response.json();
+                updateTemplateFields();
+            } catch (error) {
+                console.error('Error loading templates:', error);
+            }
+        }
+
+        // Setup file upload
+        function setupFileUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('csvFile');
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileUpload(files[0]);
+                }
+            });
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+        }
+
+        // Handle file upload
+        async function handleFileUpload(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentFile = result.filename;
+                    displayFileInfo(result);
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error uploading file: ' + error.message);
+            }
+        }
+
+        // Display file information
+        function displayFileInfo(data) {
+            document.getElementById('fileName').textContent = data.filename;
+            document.getElementById('contactCount').textContent = data.total_contacts;
+            document.getElementById('columnList').textContent = data.columns.join(', ');
+            
+            // Show preview
+            const previewContent = document.getElementById('previewContent');
+            previewContent.innerHTML = '';
+            
+            data.preview.forEach(contact => {
+                const contactDiv = document.createElement('div');
+                contactDiv.className = 'border-bottom pb-2 mb-2';
+                contactDiv.innerHTML = `
+                    <strong>${contact.email || 'No email'}</strong><br>
+                    <small class="text-muted">${contact.name || 'No name'} - ${contact.store_name || 'No store'}</small>
+                `;
+                previewContent.appendChild(contactDiv);
+            });
+
+            document.getElementById('fileInfo').style.display = 'block';
+        }
+
+        // Setup template preview
+        function setupTemplatePreview() {
+            document.getElementById('templateSelect').addEventListener('change', updateTemplateFields);
+            document.getElementById('subjectLine').addEventListener('input', updateTemplatePreview);
+            document.getElementById('emailBody').addEventListener('input', updateTemplatePreview);
+            
+            // Add event listeners for business information fields
+            document.getElementById('businessDescription').addEventListener('input', updateTemplatePreview);
+            document.getElementById('companyName').addEventListener('input', updateTemplatePreview);
+            document.getElementById('senderName').addEventListener('input', updateTemplatePreview);
+            document.getElementById('phoneNumber').addEventListener('input', updateTemplatePreview);
+            document.getElementById('website').addEventListener('input', updateTemplatePreview);
+        }
+
+        // Update template fields
+        function updateTemplateFields() {
+            const templateSelect = document.getElementById('templateSelect');
+            const selectedTemplate = templateSelect.value;
+            
+            if (selectedTemplate === 'custom') {
+                document.getElementById('subjectLine').value = '';
+                document.getElementById('emailBody').value = '';
+            } else if (templates[selectedTemplate]) {
+                const template = templates[selectedTemplate];
+                document.getElementById('subjectLine').value = template.subject;
+                document.getElementById('emailBody').value = template.template;
+            }
+            
+            updateTemplatePreview();
+        }
+
+        // Update template preview
+        function updateTemplatePreview() {
+            const subject = document.getElementById('subjectLine').value;
+            const body = document.getElementById('emailBody').value;
+            
+            if (subject || body) {
+                // Replace placeholders with actual values for preview
+                const businessDescription = document.getElementById('businessDescription').value;
+                const companyName = document.getElementById('companyName').value;
+                const senderName = document.getElementById('senderName').value;
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                const website = document.getElementById('website').value;
+                
+                let previewSubject = subject;
+                let previewBody = body;
+                
+                // Replace placeholders in preview
+                previewSubject = previewSubject.replace(/{business_description}/g, businessDescription);
+                previewSubject = previewSubject.replace(/{company_name}/g, companyName);
+                previewSubject = previewSubject.replace(/{sender_name}/g, senderName);
+                previewSubject = previewSubject.replace(/{phone_number}/g, phoneNumber);
+                previewSubject = previewSubject.replace(/{website}/g, website);
+                
+                previewBody = previewBody.replace(/{business_description}/g, businessDescription);
+                previewBody = previewBody.replace(/{company_name}/g, companyName);
+                previewBody = previewBody.replace(/{sender_name}/g, senderName);
+                previewBody = previewBody.replace(/{phone_number}/g, phoneNumber);
+                previewBody = previewBody.replace(/{website}/g, website);
+                
+                document.getElementById('previewSubject').innerHTML = `<strong>Subject:</strong> ${previewSubject}`;
+                document.getElementById('previewBody').innerHTML = `<strong>Body:</strong><br>${previewBody.replace(/\n/g, '<br>')}`;
+                document.getElementById('templatePreview').style.display = 'block';
+            } else {
+                document.getElementById('templatePreview').style.display = 'none';
+            }
+        }
+
+        // Start campaign
+        async function startCampaign() {
+            if (!currentFile) {
+                alert('Please upload a CSV file first');
+                return;
+            }
+
+            const templateName = document.getElementById('templateSelect').value;
+            const customSubject = document.getElementById('subjectLine').value;
+            const customBody = document.getElementById('emailBody').value;
+            const businessDescription = document.getElementById('businessDescription').value;
+            const companyName = document.getElementById('companyName').value;
+            const senderName = document.getElementById('senderName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const website = document.getElementById('website').value;
+
+            if (!customSubject || !customBody) {
+                alert('Please fill in both subject and body');
+                return;
+            }
+
+            try {
+                const response = await fetch('/start_campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        filename: currentFile,
+                        template_name: templateName,
+                        custom_subject: customSubject,
+                        custom_body: customBody,
+                        business_description: businessDescription,
+                        company_name: companyName,
+                        sender_name: senderName,
+                        phone_number: phoneNumber,
+                        website: website
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    updateStatus('running');
+                    startStatusPolling();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error starting campaign: ' + error.message);
+            }
+        }
+
+        // Stop campaign
+        async function stopCampaign() {
+            try {
+                const response = await fetch('/stop_campaign', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateStatus('stopped');
+                    stopStatusPolling();
+                }
+            } catch (error) {
+                console.error('Error stopping campaign:', error);
+            }
+        }
+
+        // Update status
+        function updateStatus(status) {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const progressContainer = document.getElementById('progressContainer');
+
+            indicator.className = 'status-indicator';
+            
+            switch (status) {
+                case 'running':
+                    indicator.classList.add('status-running');
+                    text.textContent = 'Campaign running...';
+                    startBtn.style.display = 'none';
+                    stopBtn.style.display = 'inline-block';
+                    progressContainer.style.display = 'block';
+                    break;
+                case 'stopped':
+                    indicator.classList.add('status-stopped');
+                    text.textContent = 'Campaign stopped';
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                    break;
+                default:
+                    indicator.classList.add('status-idle');
+                    text.textContent = 'Ready to start campaign';
+                    startBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                    progressContainer.style.display = 'none';
+            }
+        }
+
+        // Start status polling
+        function startStatusPolling() {
+            statusInterval = setInterval(pollStatus, 1000);
+        }
+
+        // Stop status polling
+        function stopStatusPolling() {
+            if (statusInterval) {
+                clearInterval(statusInterval);
+                statusInterval = null;
+            }
+        }
+
+        // Poll status
+        async function pollStatus() {
+            try {
+                const response = await fetch('/status');
+                const status = await response.json();
+                
+                // Update progress
+                document.getElementById('progressBar').style.width = status.progress + '%';
+                document.getElementById('sentCount').textContent = status.sent;
+                document.getElementById('failedCount').textContent = status.failed;
+                document.getElementById('totalCount').textContent = status.total;
+                
+                // Update status
+                if (status.running) {
+                    updateStatus('running');
+                } else {
+                    updateStatus('stopped');
+                    stopStatusPolling();
+                }
+                
+                // Update logs
+                updateLogs();
+                
+            } catch (error) {
+                console.error('Error polling status:', error);
+            }
+        }
+
+        // Update logs
+        async function updateLogs() {
+            try {
+                const response = await fetch('/logs');
+                const data = await response.json();
+                
+                const logContainer = document.getElementById('logContainer');
+                logContainer.innerHTML = '';
+                
+                data.logs.forEach(log => {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = `log-entry log-${log.level}`;
+                    logEntry.innerHTML = `<small>[${log.timestamp}]</small> ${log.message}`;
+                    logContainer.appendChild(logEntry);
+                });
+                
+                // Scroll to bottom
+                logContainer.scrollTop = logContainer.scrollHeight;
+                
+            } catch (error) {
+                console.error('Error updating logs:', error);
+            }
+        }
+    </script>
+</body>
+</html> 

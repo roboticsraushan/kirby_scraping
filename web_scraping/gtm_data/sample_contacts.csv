@@ -1,0 +1,3 @@
+email,name,store_name,address,phone,location
+test1@example.com,John Smith,Smith Vacuum Service,"123 Main St, Anytown, USA",555-123-4567,"New York, NY"
+test2@example.com,Jane Doe,Doe Vacuum Center,"456 Oak Ave, Somewhere, USA",555-987-6543,"Los Angeles, CA"
