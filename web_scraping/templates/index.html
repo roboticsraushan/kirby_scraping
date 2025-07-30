@@ -57,12 +57,12 @@
         
         .upload-area {
             border: 2px dashed #e3f2fd;
-            border-radius: 10px;
-            padding: 4px;
+            border-radius: 8px;
+            padding: 3px;
             text-align: center;
             transition: all 0.3s ease;
             background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             max-width: 100%;
         }
         
@@ -78,10 +78,10 @@
         }
         
         .section-card {
-            border-radius: 10px;
+            border-radius: 8px;
             border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
-            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 6px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -90,14 +90,14 @@
             margin-bottom: 0;
         }
         .section-header {
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-bottom: 1px solid #f0f0f0;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             flex-shrink: 0;
         }
         .card-body {
-            padding: 8px !important;
+            padding: 6px !important;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -141,21 +141,21 @@
         .progress-container {
             display: none;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+            border-radius: 8px;
+            padding: 8px;
+            margin-top: 8px;
             margin-bottom: 0;
         }
         
         .log-container {
-            max-height: 80px;
-            min-height: 40px;
+            max-height: 60px;
+            min-height: 30px;
             overflow-y: auto;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 8px;
             border: 1px solid #e0e0e0;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             flex: 1;
         }
         
@@ -200,13 +200,13 @@
         }
         
         .contact-preview {
-            max-height: 60px;
-            min-height: 30px;
+            max-height: 50px;
+            min-height: 25px;
             overflow-y: auto;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 0.8rem;
+            border-radius: 6px;
+            padding: 6px;
+            font-size: 0.75rem;
             flex: 1;
         }
         
@@ -238,20 +238,20 @@
         
         .stats-card {
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 4px;
+            border-radius: 8px;
+            padding: 3px;
             text-align: center;
-            margin: 2px;
+            margin: 1px;
         }
         
         .stats-number {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
         
         .stats-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #666;
         }
         
@@ -268,18 +268,18 @@
         
         .file-info-card {
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+            border-radius: 8px;
+            padding: 8px;
+            margin-top: 8px;
             border: 1px solid #e0e0e0;
         }
         .form-label, label, .fw-bold {
-            font-size: 0.9rem !important;
+            font-size: 0.8rem !important;
         }
         .form-control, .btn, textarea, input[type="text"] {
-            font-size: 0.9rem !important;
-            padding: 2px 6px !important;
-            height: 28px !important;
+            font-size: 0.8rem !important;
+            padding: 2px 4px !important;
+            height: 24px !important;
         }
         textarea.form-control {
             height: auto !important;
@@ -294,8 +294,8 @@
             border-color: #dee2e6;
         }
         .btn {
-            padding: 2px 8px !important;
-            font-size: 0.9rem !important;
+            padding: 1px 6px !important;
+            font-size: 0.8rem !important;
         }
         .row {
             margin-left: 0;
@@ -304,8 +304,8 @@
             display: flex;
         }
         .col-md-4 {
-            padding-left: 4px;
-            padding-right: 4px;
+            padding-left: 2px;
+            padding-right: 2px;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
@@ -429,6 +429,38 @@
                         </div>
                     </div>
 
+                    <!-- Attachment Upload Section -->
+                    <div class="section-card upload-section">
+                        <div class="section-header">
+                            <i class="fas fa-paperclip"></i> Upload Attachments
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="upload-area" id="attachmentUploadArea">
+                                        <i class="fas fa-paperclip fa-lg text-info mb-1"></i>
+                                        <p class="mb-1 small">Drop attachment files here</p>
+                                        <p class="text-muted small mb-2">or click to browse</p>
+                                        <input type="file" id="attachmentFile" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.xlsx,.xls,.zip,.rar,.7z" multiple style="display: none;">
+                                        <button class="btn btn-info btn-sm" onclick="document.getElementById('attachmentFile').click()">
+                                            <i class="fas fa-folder-open"></i> Choose Files
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="attachmentFileInfo" class="file-info-card" style="display: none;">
+                                        <h6 class="mb-2">Attachments:</h6>
+                                        <div id="attachmentPreviewContent" class="contact-preview"></div>
+                                    </div>
+                                    <div id="attachmentNoFile" class="text-muted text-center" style="padding: 20px;">
+                                        <i class="fas fa-paperclip fa-2x mb-2"></i>
+                                        <p class="small">Upload files to attach to emails</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Campaign Control Section -->
                     <div class="section-card control-section">
                         <div class="section-header">
@@ -506,7 +538,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Email Body:</label>
-                                <textarea class="form-control" id="emailBody" rows="12" placeholder="Email content..." style="color: #999; font-style: italic;">📋 Instructions:
+                                <textarea class="form-control" id="emailBody" rows="8" placeholder="Email content..." style="color: #999; font-style: italic;">📋 Instructions:
 
 1. Drag & drop your CSV file (contacts) in the left panel
 2. Drag & drop your DOC file (email template) in the left panel  
@@ -515,6 +547,16 @@
 5. Start the campaign when ready
 
 Your email content will appear here after uploading a DOC file...</textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email Preview (with images):</label>
+                                <div id="emailPreview" class="border rounded p-3" style="background: white; min-height: 200px; max-height: 400px; overflow-y: auto;">
+                                    <div class="text-muted text-center">
+                                        <i class="fas fa-eye fa-2x mb-2"></i>
+                                        <p>Email preview will appear here after uploading a DOC file</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -527,10 +569,13 @@ Your email content will appear here after uploading a DOC file...</textarea>
     <script>
         let currentFile = null;
         let statusInterval = null;
+        let attachmentFiles = [];
+        let embeddedImages = [];
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             setupFileUpload();
+            setupEmailPreview();
         });
 
         // Setup file upload
@@ -578,6 +623,26 @@ Your email content will appear here after uploading a DOC file...</textarea>
                 }
             });
 
+            // Attachment Drag and drop
+            const attachmentUploadArea = document.getElementById('attachmentUploadArea');
+            attachmentUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                attachmentUploadArea.classList.add('dragover');
+            });
+
+            attachmentUploadArea.addEventListener('dragleave', () => {
+                attachmentUploadArea.classList.remove('dragover');
+            });
+
+            attachmentUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                attachmentUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleAttachmentUpload(files);
+                }
+            });
+
             // File input change
             csvFileInput.addEventListener('change', (e) => {
                 if (e.target.files.length > 0) {
@@ -590,6 +655,24 @@ Your email content will appear here after uploading a DOC file...</textarea>
                     handleDOCUpload(e.target.files[0]);
                 }
             });
+
+            // Attachment file input
+            const attachmentFileInput = document.getElementById('attachmentFile');
+            attachmentFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleAttachmentUpload(e.target.files);
+                }
+            });
+        }
+
+        // Setup email preview updates
+        function setupEmailPreview() {
+            const emailBody = document.getElementById('emailBody');
+            const subjectLine = document.getElementById('subjectLine');
+            
+            // Update preview when email body changes
+            emailBody.addEventListener('input', updateEmailPreview);
+            subjectLine.addEventListener('input', updateEmailPreview);
         }
 
         // Handle CSV file upload
@@ -664,7 +747,7 @@ Your email content will appear here after uploading a DOC file...</textarea>
             const previewContent = document.getElementById('docPreviewContent');
             previewContent.innerHTML = '';
             
-            // Handle DOC file - populate email body
+            // Handle DOC file - populate email body with plain text
             const emailBody = document.getElementById('emailBody');
             emailBody.value = data.content;
             emailBody.style.color = '#000';
@@ -672,15 +755,220 @@ Your email content will appear here after uploading a DOC file...</textarea>
             emailBody.style.backgroundColor = '#fff';
             emailBody.style.borderColor = '#ced4da';
             
+            // Store HTML content for email sending
+            window.docHtmlContent = data.html_content || '';
+            
+            // Handle embedded images
+            embeddedImages = data.images || [];
+            
+            let imageInfo = '';
+            if (embeddedImages.length > 0) {
+                imageInfo = `<br><small class="text-muted">📷 ${embeddedImages.length} image(s) extracted and will be embedded in emails.</small>`;
+            }
+            
             previewContent.innerHTML = `
                 <div class="alert alert-success">
                     <i class="fas fa-file-word"></i> DOC file loaded successfully!
                     <br><small class="text-muted">Email body has been updated with the content from your DOC file.</small>
+                    ${imageInfo}
                 </div>
             `;
 
             document.getElementById('docFileInfo').style.display = 'block';
             document.getElementById('docNoFile').style.display = 'none';
+            
+            // Update email preview with HTML content
+            updateEmailPreview();
+        }
+
+        // Handle attachment upload
+        async function handleAttachmentUpload(files) {
+            console.log(`🔍 handleAttachmentUpload called with ${files.length} files:`, Array.from(files).map(f => f.name));
+            
+            attachmentFiles = [];
+            const previewContent = document.getElementById('attachmentPreviewContent');
+            previewContent.innerHTML = '';
+            
+            for (let file of files) {
+                console.log(`📎 Processing attachment: ${file.name}`);
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/upload_attachment', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        attachmentFiles.push(result.filename);
+                        console.log(`✅ Attachment uploaded successfully: ${result.filename}`);
+                        
+                        const fileExt = result.filename.split('.').pop().toLowerCase();
+                        let fileIcon = 'fas fa-file';
+                        
+                        // Set appropriate icon based on file type
+                        if (fileExt === 'pdf') {
+                            fileIcon = 'fas fa-file-pdf';
+                        } else if (['doc', 'docx'].includes(fileExt)) {
+                            fileIcon = 'fas fa-file-word';
+                        } else if (['xls', 'xlsx'].includes(fileExt)) {
+                            fileIcon = 'fas fa-file-excel';
+                        } else if (['zip', 'rar', '7z'].includes(fileExt)) {
+                            fileIcon = 'fas fa-file-archive';
+                        } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+                            fileIcon = 'fas fa-file-image';
+                        } else if (fileExt === 'txt') {
+                            fileIcon = 'fas fa-file-alt';
+                        }
+                        
+                        const attachmentDiv = document.createElement('div');
+                        attachmentDiv.className = 'border-bottom pb-2 mb-2';
+                        attachmentDiv.innerHTML = `
+                            <i class="${fileIcon}"></i> <strong>${result.filename}</strong>
+                            <button class="btn btn-sm btn-outline-danger float-end" onclick="removeAttachment('${result.filename}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        previewContent.appendChild(attachmentDiv);
+                    } else {
+                        console.error(`❌ Error uploading attachment ${file.name}:`, result.error);
+                        alert('Error uploading attachment: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error(`❌ Exception uploading attachment ${file.name}:`, error);
+                    alert('Error uploading attachment: ' + error.message);
+                }
+            }
+
+            console.log(`📋 Final attachmentFiles array:`, attachmentFiles);
+
+            if (attachmentFiles.length > 0) {
+                document.getElementById('attachmentFileInfo').style.display = 'block';
+                document.getElementById('attachmentNoFile').style.display = 'none';
+            }
+        }
+
+        // Remove attachment
+        function removeAttachment(filename) {
+            attachmentFiles = attachmentFiles.filter(file => file !== filename);
+            updateAttachmentPreview();
+        }
+
+        // Update attachment preview
+        function updateAttachmentPreview() {
+            const previewContent = document.getElementById('attachmentPreviewContent');
+            previewContent.innerHTML = '';
+            
+            attachmentFiles.forEach(filename => {
+                const fileExt = filename.split('.').pop().toLowerCase();
+                let fileIcon = 'fas fa-file';
+                
+                // Set appropriate icon based on file type
+                if (fileExt === 'pdf') {
+                    fileIcon = 'fas fa-file-pdf';
+                } else if (['doc', 'docx'].includes(fileExt)) {
+                    fileIcon = 'fas fa-file-word';
+                } else if (['xls', 'xlsx'].includes(fileExt)) {
+                    fileIcon = 'fas fa-file-excel';
+                } else if (['zip', 'rar', '7z'].includes(fileExt)) {
+                    fileIcon = 'fas fa-file-archive';
+                } else if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+                    fileIcon = 'fas fa-file-image';
+                } else if (fileExt === 'txt') {
+                    fileIcon = 'fas fa-file-alt';
+                }
+                
+                const attachmentDiv = document.createElement('div');
+                attachmentDiv.className = 'border-bottom pb-2 mb-2';
+                attachmentDiv.innerHTML = `
+                    <i class="${fileIcon}"></i> <strong>${filename}</strong>
+                    <button class="btn btn-sm btn-outline-danger float-end" onclick="removeAttachment('${filename}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                previewContent.appendChild(attachmentDiv);
+            });
+
+            if (attachmentFiles.length > 0) {
+                document.getElementById('attachmentFileInfo').style.display = 'block';
+                document.getElementById('attachmentNoFile').style.display = 'none';
+            } else {
+                document.getElementById('attachmentFileInfo').style.display = 'none';
+                document.getElementById('attachmentNoFile').style.display = 'block';
+            }
+        }
+
+        // Update email preview with HTML and images
+        function updateEmailPreview() {
+            const emailPreview = document.getElementById('emailPreview');
+            const emailBody = document.getElementById('emailBody').value;
+            
+            if (!emailBody || emailBody.includes('📋 Instructions:')) {
+                emailPreview.innerHTML = `
+                    <div class="text-muted text-center">
+                        <i class="fas fa-eye fa-2x mb-2"></i>
+                        <p>Email preview will appear here after uploading a DOC file</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Check if we have HTML content from DOC file
+            if (window.docHtmlContent && window.docHtmlContent.trim()) {
+                // Use the HTML content from DOC file for preview
+                let htmlContent = window.docHtmlContent;
+                
+                // Add embedded images info if available
+                if (embeddedImages && embeddedImages.length > 0) {
+                    htmlContent += '<div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 5px;">';
+                    htmlContent += '<h6 style="color: #666; margin-bottom: 10px;">📷 Embedded Images:</h6>';
+                    
+                    embeddedImages.forEach((imagePath, index) => {
+                        const imageName = imagePath.split('/').pop();
+                        htmlContent += `
+                            <div style="margin: 5px 0; padding: 8px; background: #fff; border-radius: 3px; border: 1px solid #ddd;">
+                                <strong>Image ${index + 1}:</strong> ${imageName}
+                                <br><small style="color: #666;">This image will be embedded in the email body</small>
+                            </div>
+                        `;
+                    });
+                    
+                    htmlContent += '</div>';
+                }
+                
+                emailPreview.innerHTML = htmlContent;
+            } else {
+                // Fallback to plain text with basic formatting
+                let htmlContent = `
+                    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                        ${emailBody.replace(/\n/g, '<br>')}
+                `;
+                
+                // Add embedded images if available
+                if (embeddedImages && embeddedImages.length > 0) {
+                    htmlContent += '<div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">';
+                    htmlContent += '<h6 style="color: #666; margin-bottom: 10px;">📷 Embedded Images:</h6>';
+                    
+                    embeddedImages.forEach((imagePath, index) => {
+                        const imageName = imagePath.split('/').pop();
+                        htmlContent += `
+                            <div style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                                <strong>Image ${index + 1}:</strong> ${imageName}
+                                <br><small style="color: #666;">This image will be embedded in the email body</small>
+                            </div>
+                        `;
+                    });
+                    
+                    htmlContent += '</div>';
+                }
+                
+                htmlContent += '</div>';
+                
+                emailPreview.innerHTML = htmlContent;
+            }
         }
 
 
@@ -700,17 +988,35 @@ Your email content will appear here after uploading a DOC file...</textarea>
                 return;
             }
 
+            // Debug: Log what we're sending
+            console.log('🚀 Starting campaign with:');
+            console.log('- CSV file:', currentFile);
+            console.log('- Attachments array:', attachmentFiles);
+            console.log('- Attachments count:', attachmentFiles.length);
+            console.log('- Embedded images:', embeddedImages);
+            console.log('- Subject:', customSubject);
+            console.log('- Body length:', customBody.length);
+            console.log('- HTML content length:', window.docHtmlContent ? window.docHtmlContent.length : 0);
+
+            // Create the payload
+            const payload = {
+                filename: currentFile,
+                custom_subject: customSubject,
+                custom_body: customBody,
+                attachments: attachmentFiles,
+                embedded_images: embeddedImages,
+                html_content: window.docHtmlContent || ''
+            };
+
+            console.log('📤 Sending payload to backend:', payload);
+
             try {
                 const response = await fetch('/start_campaign', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        filename: currentFile,
-                        custom_subject: customSubject,
-                        custom_body: customBody
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 const result = await response.json();

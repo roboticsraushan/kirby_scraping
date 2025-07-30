@@ -8,25 +8,99 @@ import smtplib
 import csv
 import time
 import os
+import base64
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email import encoders
 from email_config import get_template, GMAIL_CONFIG
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-def send_email_smtp(to_email, subject, body, sender_email, sender_password):
-    """Send email using SMTP"""
+def send_email_smtp(to_email, subject, body, sender_email, sender_password, attachments=None, html_body=None, embedded_images=None):
+    """Send email using SMTP with optional attachments and embedded images"""
     try:
         # Create message
-        msg = MIMEMultipart()
+        msg = MIMEMultipart('related')
         msg['From'] = sender_email
         msg['To'] = to_email
         msg['Subject'] = subject
         
-        # Add body
-        msg.attach(MIMEText(body, 'plain'))
+        # Create alternative part for HTML and plain text
+        msg_alternative = MIMEMultipart('alternative')
+        msg.attach(msg_alternative)
+        
+        # Add plain text body
+        msg_alternative.attach(MIMEText(body, 'plain'))
+        
+        # Add HTML body if provided
+        if html_body:
+            msg_alternative.attach(MIMEText(html_body, 'html'))
+        
+        # Add embedded images if provided
+        if embedded_images:
+            for image_path in embedded_images:
+                if os.path.exists(image_path):
+                    try:
+                        with open(image_path, "rb") as image_file:
+                            image_data = image_file.read()
+                        
+                        # Determine image type from file extension
+                        image_ext = os.path.splitext(image_path)[1].lower()
+                        if image_ext in ['.jpg', '.jpeg']:
+                            image = MIMEImage(image_data, _subtype='jpeg')
+                        elif image_ext == '.png':
+                            image = MIMEImage(image_data, _subtype='png')
+                        elif image_ext == '.gif':
+                            image = MIMEImage(image_data, _subtype='gif')
+                        else:
+                            image = MIMEImage(image_data)
+                        
+                        image.add_header('Content-ID', f'<{os.path.basename(image_path)}>')
+                        msg.attach(image)
+                        print(f"✅ Embedded image: {os.path.basename(image_path)}")
+                    except Exception as e:
+                        print(f"❌ Error embedding image {image_path}: {e}")
+        
+        # Add attachments if provided
+        if attachments:
+            for attachment_path in attachments:
+                if os.path.exists(attachment_path):
+                    try:
+                        with open(attachment_path, "rb") as attachment:
+                            part = MIMEBase('application', 'octet-stream')
+                            part.set_payload(attachment.read())
+                        
+                        encoders.encode_base64(part)
+                        
+                        # Set proper MIME type based on file extension
+                        file_ext = os.path.splitext(attachment_path)[1].lower()
+                        if file_ext == '.pdf':
+                            part.add_header('Content-Type', 'application/pdf')
+                        elif file_ext in ['.doc', '.docx']:
+                            part.add_header('Content-Type', 'application/msword' if file_ext == '.doc' else 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+                        elif file_ext == '.zip':
+                            part.add_header('Content-Type', 'application/zip')
+                        elif file_ext == '.rar':
+                            part.add_header('Content-Type', 'application/x-rar-compressed')
+                        elif file_ext == '.7z':
+                            part.add_header('Content-Type', 'application/x-7z-compressed')
+                        elif file_ext in ['.xls', '.xlsx']:
+                            part.add_header('Content-Type', 'application/vnd.ms-excel' if file_ext == '.xls' else 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                        elif file_ext == '.txt':
+                            part.add_header('Content-Type', 'text/plain')
+                        
+                        part.add_header(
+                            'Content-Disposition',
+                            f'attachment; filename= {os.path.basename(attachment_path)}'
+                        )
+                        msg.attach(part)
+                        print(f"✅ Attached: {os.path.basename(attachment_path)}")
+                    except Exception as e:
+                        print(f"❌ Error attaching {attachment_path}: {e}")
         
         # Create SMTP session
         server = smtplib.SMTP('smtp.gmail.com', 587)
