@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 from email_config import get_template, CAMPAIGN_SETTINGS
 from simple_email_sender import send_email_smtp
+from docx import Document
 
 # Load environment variables
 load_dotenv()
@@ -24,7 +25,7 @@ app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key-change-this')
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'csv'}
+ALLOWED_EXTENSIONS = {'csv', 'docx', 'doc'}
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -47,6 +48,18 @@ campaign_status = {
 def allowed_file(filename):
     """Check if file extension is allowed"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def read_doc_file(filepath):
+    """Read content from DOC/DOCX file"""
+    try:
+        doc = Document(filepath)
+        content = []
+        for paragraph in doc.paragraphs:
+            if paragraph.text.strip():
+                content.append(paragraph.text)
+        return '\n\n'.join(content)
+    except Exception as e:
+        raise Exception(f"Error reading DOC file: {str(e)}")
 
 def log_message(message, level='info'):
     """Add log message to campaign status"""
@@ -161,23 +174,39 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         
-        # Read CSV to get preview
-        try:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                reader = csv.DictReader(f)
-                contacts = list(reader)
+        # Check if it's a DOC file
+        file_ext = filename.rsplit('.', 1)[1].lower()
+        if file_ext in ['docx', 'doc']:
+            # Read DOC file content
+            try:
+                content = read_doc_file(filepath)
+                return jsonify({
+                    'success': True,
+                    'filename': filename,
+                    'file_type': 'doc',
+                    'content': content
+                })
+            except Exception as e:
+                return jsonify({'error': f'Error reading DOC file: {str(e)}'}), 400
+        else:
+            # Read CSV to get preview
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    reader = csv.DictReader(f)
+                    contacts = list(reader)
+                    
+                preview = contacts  # Show all contacts
                 
-            preview = contacts  # Show all contacts
-            
-            return jsonify({
-                'success': True,
-                'filename': filename,
-                'total_contacts': len(contacts),
-                'preview': preview,
-                'columns': list(contacts[0].keys()) if contacts else []
-            })
-        except Exception as e:
-            return jsonify({'error': f'Error reading CSV: {str(e)}'}), 400
+                return jsonify({
+                    'success': True,
+                    'filename': filename,
+                    'file_type': 'csv',
+                    'total_contacts': len(contacts),
+                    'preview': preview,
+                    'columns': list(contacts[0].keys()) if contacts else []
+                })
+            except Exception as e:
+                return jsonify({'error': f'Error reading CSV: {str(e)}'}), 400
     
     return jsonify({'error': 'Invalid file type'}), 400
 

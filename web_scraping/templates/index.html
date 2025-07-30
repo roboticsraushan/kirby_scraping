@@ -11,41 +11,59 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Remove default margin to maximize space */
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
         
         .main-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            margin: 20px;
+            margin: 8px;
             overflow: hidden;
+            height: calc(100vh - 16px);
+            display: flex;
+            flex-direction: column;
         }
         
         .app-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 10px 0 10px 0;
             text-align: center;
             margin-bottom: 0;
+            flex-shrink: 0;
         }
         
         .app-header h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: 1.3rem;
             font-weight: 300;
+        }
+        .container-fluid {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 8px !important;
+        }
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+            flex: 1;
+            display: flex;
         }
         
         .upload-area {
-            border: 3px dashed #e3f2fd;
-            border-radius: 15px;
-            padding: 8px;
+            border: 2px dashed #e3f2fd;
+            border-radius: 10px;
+            padding: 4px;
             text-align: center;
             transition: all 0.3s ease;
             background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            margin-bottom: 6px;
-            max-width: 60%;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 4px;
+            max-width: 100%;
         }
         
         .upload-area:hover {
@@ -60,20 +78,30 @@
         }
         
         .section-card {
-            border-radius: 15px;
+            border-radius: 10px;
             border: none;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            margin-bottom: 10px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        
+        .section-card:last-child {
+            margin-bottom: 0;
+        }
         .section-header {
-            padding: 15px 20px;
+            padding: 8px 12px;
             border-bottom: 1px solid #f0f0f0;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            flex-shrink: 0;
         }
-        
+        .card-body {
+            padding: 8px !important;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
         .upload-section {
             background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
         }
@@ -116,15 +144,19 @@
             border-radius: 10px;
             padding: 15px;
             margin-top: 15px;
+            margin-bottom: 0;
         }
         
         .log-container {
-            max-height: 180px;
+            max-height: 80px;
+            min-height: 40px;
             overflow-y: auto;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             padding: 15px;
             border: 1px solid #e0e0e0;
+            font-size: 0.8rem;
+            flex: 1;
         }
         
         .log-entry {
@@ -168,11 +200,14 @@
         }
         
         .contact-preview {
-            max-height: 120px;
+            max-height: 60px;
+            min-height: 30px;
             overflow-y: auto;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
             padding: 10px;
+            font-size: 0.8rem;
+            flex: 1;
         }
         
         .btn-campaign {
@@ -204,19 +239,19 @@
         .stats-card {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
-            padding: 10px;
+            padding: 4px;
             text-align: center;
-            margin: 5px 0;
+            margin: 2px;
         }
         
         .stats-number {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: bold;
             margin-bottom: 3px;
         }
         
         .stats-label {
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             color: #666;
         }
         
@@ -238,6 +273,84 @@
             margin-top: 15px;
             border: 1px solid #e0e0e0;
         }
+        .form-label, label, .fw-bold {
+            font-size: 0.9rem !important;
+        }
+        .form-control, .btn, textarea, input[type="text"] {
+            font-size: 0.9rem !important;
+            padding: 2px 6px !important;
+            height: 28px !important;
+        }
+        textarea.form-control {
+            height: auto !important;
+            min-height: 200px !important;
+            max-height: none !important;
+            font-size: 0.9rem !important;
+            flex: 1;
+            resize: none;
+        }
+        textarea.form-control[style*="color: #999"] {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+        .btn {
+            padding: 2px 8px !important;
+            font-size: 0.9rem !important;
+        }
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+            flex: 1;
+            display: flex;
+        }
+        .col-md-4 {
+            padding-left: 4px;
+            padding-right: 4px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .col-md-8 {
+            padding-left: 4px;
+            padding-right: 4px;
+            display: flex;
+            flex-direction: column;
+        }
+        .email-template-section {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .email-template-section .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .email-template-section .mb-3 {
+            margin-bottom: 8px !important;
+        }
+        .email-template-section .mb-3:last-child {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .email-template-section .mb-3:last-child label {
+            margin-bottom: 4px;
+        }
+        .email-template-section .mb-3:last-child textarea {
+            flex: 1;
+            min-height: 0;
+        }
+        @media (max-width: 1200px) {
+            .col-md-4, .col-md-8 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .main-container {
+                margin: 2px;
+                height: calc(100vh - 4px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -250,8 +363,72 @@
 
         <div class="container-fluid p-4">
             <div class="row">
-                <!-- Left Half: Campaign Control & Logs -->
-                <div class="col-md-6">
+                <!-- Left Side: All Upload & Control Sections -->
+                <div class="col-md-4">
+                    <!-- CSV Upload Section -->
+                    <div class="section-card upload-section">
+                        <div class="section-header">
+                            <i class="fas fa-users"></i> Upload Contacts (CSV)
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="upload-area" id="csvUploadArea">
+                                        <i class="fas fa-file-csv fa-lg text-primary mb-1"></i>
+                                        <p class="mb-1 small">Drop your CSV file with contacts here</p>
+                                        <p class="text-muted small mb-2">or click to browse</p>
+                                        <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                                        <button class="btn btn-primary btn-sm" onclick="document.getElementById('csvFile').click()">
+                                            <i class="fas fa-folder-open"></i> Choose CSV File
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="csvFileInfo" class="file-info-card" style="display: none;">
+                                        <h6 class="mb-2">Contact Preview:</h6>
+                                        <div id="csvPreviewContent" class="contact-preview"></div>
+                                    </div>
+                                    <div id="csvNoFile" class="text-muted text-center" style="padding: 20px;">
+                                        <i class="fas fa-users fa-2x mb-2"></i>
+                                        <p class="small">Upload a CSV file to see contact preview</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DOC Upload Section -->
+                    <div class="section-card template-section">
+                        <div class="section-header">
+                            <i class="fas fa-file-word"></i> Upload Email Template (DOC)
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="upload-area" id="docUploadArea">
+                                        <i class="fas fa-file-word fa-lg text-warning mb-1"></i>
+                                        <p class="mb-1 small">Drop your DOC file with email content here</p>
+                                        <p class="text-muted small mb-2">or click to browse</p>
+                                        <input type="file" id="docFile" accept=".docx,.doc" style="display: none;">
+                                        <button class="btn btn-warning btn-sm" onclick="document.getElementById('docFile').click()">
+                                            <i class="fas fa-folder-open"></i> Choose DOC File
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="docFileInfo" class="file-info-card" style="display: none;">
+                                        <h6 class="mb-2">Template Loaded:</h6>
+                                        <div id="docPreviewContent" class="contact-preview"></div>
+                                    </div>
+                                    <div id="docNoFile" class="text-muted text-center" style="padding: 20px;">
+                                        <i class="fas fa-file-word fa-2x mb-2"></i>
+                                        <p class="small">Upload a DOC file to see template preview</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Campaign Control Section -->
                     <div class="section-card control-section">
                         <div class="section-header">
@@ -314,69 +491,31 @@
                     </div>
                 </div>
 
-                <!-- Right Half: Upload & Template -->
-                <div class="col-md-6">
-                    <!-- File Upload Section -->
-                    <div class="section-card upload-section">
-                        <div class="section-header">
-                            <i class="fas fa-upload"></i> Upload Contacts
-                        </div>
-                        <div class="card-body p-3">
-                            <div class="upload-area" id="uploadArea">
-                                <i class="fas fa-cloud-upload-alt fa-lg text-primary mb-1"></i>
-                                <p class="mb-1 small">Drop your CSV file here</p>
-                                <p class="text-muted small mb-2">or click to browse</p>
-                                <input type="file" id="csvFile" accept=".csv" style="display: none;">
-                                <button class="btn btn-primary btn-sm" onclick="document.getElementById('csvFile').click()">
-                                    <i class="fas fa-folder-open"></i> Choose File
-                                </button>
-                            </div>
-                            
-                            <div id="fileInfo" class="file-info-card" style="display: none;">
-                                <h6 class="mt-3">Contact Preview:</h6>
-                                <div id="previewContent" class="contact-preview"></div>
-                            </div>
-                        </div>
-                    </div>
-
+                <!-- Right Side: Email Template -->
+                <div class="col-md-8">
                     <!-- Email Template Section -->
-                    <div class="section-card template-section">
+                    <div class="section-card template-section email-template-section">
                         <div class="section-header">
                             <i class="fas fa-edit"></i> Email Template
                         </div>
                         <div class="card-body p-3">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Subject Line:</label>
-                                <input type="text" class="form-control" id="subjectLine" placeholder="Email subject..." value="Angel Investment Opportunity - Nolon AI Update">
+                                <input type="text" class="form-control" id="subjectLine" placeholder="Email subject..." value="Introducing Nolon">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Email Body:</label>
-                                <textarea class="form-control" id="emailBody" rows="8" placeholder="Email content...">Hi {name},
+                                <textarea class="form-control" id="emailBody" rows="12" placeholder="Email content..." style="color: #999; font-style: italic;">📋 Instructions:
 
-A quick update from our side, and all of this has happened just in the last few weeks: 
+1. Drag & drop your CSV file (contacts) in the left panel
+2. Drag & drop your DOC file (email template) in the left panel  
+3. Edit the subject line above
+4. Email body will be automatically loaded from your DOC file
+5. Start the campaign when ready
 
-• Company is officially incorporated 
-• We've finalized a live+work villa setup in Bangalore, [work-eat-sleep-repeat]
-• Team's in motion: 4 interns onboarded, 2 full-time engineers joining soon
-• Procurement for key hardware is underway
-• MVP will be ready in 2 months[week-wise dev plan ready with contingency], and we kick off our first real-world pilot in Month 3 (in Bangalore), in a banglore it company washroom 
-
-We're raising a ₹1.5–2 Cr angel round, got some commitment already, with ₹20L as minimum cheque size.
-
-Would deeply appreciate if you could connect us with any angels who can bring patient capital to back a deeptech startup from India, for the world.
-
-Will send over our updated vision slide + demo videos right after this — feel free to forward them!
-
-Thanks a lot for your continued support 🙏
-
-{sender_name}
-{company_name}</textarea>
+Your email content will appear here after uploading a DOC file...</textarea>
                             </div>
-
-
-
-
                         </div>
                     </div>
                 </div>
@@ -396,38 +535,65 @@ Thanks a lot for your continued support 🙏
 
         // Setup file upload
         function setupFileUpload() {
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInput = document.getElementById('csvFile');
+            const csvUploadArea = document.getElementById('csvUploadArea');
+            const docUploadArea = document.getElementById('docUploadArea');
+            const csvFileInput = document.getElementById('csvFile');
+            const docFileInput = document.getElementById('docFile');
 
-            // Drag and drop
-            uploadArea.addEventListener('dragover', (e) => {
+            // CSV Drag and drop
+            csvUploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                uploadArea.classList.add('dragover');
+                csvUploadArea.classList.add('dragover');
             });
 
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
+            csvUploadArea.addEventListener('dragleave', () => {
+                csvUploadArea.classList.remove('dragover');
             });
 
-            uploadArea.addEventListener('drop', (e) => {
+            csvUploadArea.addEventListener('drop', (e) => {
                 e.preventDefault();
-                uploadArea.classList.remove('dragover');
+                csvUploadArea.classList.remove('dragover');
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
-                    handleFileUpload(files[0]);
+                    handleCSVUpload(files[0]);
+                }
+            });
+
+            // DOC Drag and drop
+            docUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                docUploadArea.classList.add('dragover');
+            });
+
+            docUploadArea.addEventListener('dragleave', () => {
+                docUploadArea.classList.remove('dragover');
+            });
+
+            docUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                docUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleDOCUpload(files[0]);
                 }
             });
 
             // File input change
-            fileInput.addEventListener('change', (e) => {
+            csvFileInput.addEventListener('change', (e) => {
                 if (e.target.files.length > 0) {
-                    handleFileUpload(e.target.files[0]);
+                    handleCSVUpload(e.target.files[0]);
+                }
+            });
+
+            docFileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleDOCUpload(e.target.files[0]);
                 }
             });
         }
 
-        // Handle file upload
-        async function handleFileUpload(file) {
+        // Handle CSV file upload
+        async function handleCSVUpload(file) {
             const formData = new FormData();
             formData.append('file', file);
 
@@ -439,23 +605,46 @@ Thanks a lot for your continued support 🙏
 
                 const result = await response.json();
 
-                if (result.success) {
+                if (result.success && result.file_type === 'csv') {
                     currentFile = result.filename;
-                    displayFileInfo(result);
+                    displayCSVInfo(result);
                 } else {
-                    alert('Error: ' + result.error);
+                    alert('Error: ' + (result.error || 'Invalid file type. Please upload a CSV file.'));
                 }
             } catch (error) {
-                alert('Error uploading file: ' + error.message);
+                alert('Error uploading CSV file: ' + error.message);
             }
         }
 
-        // Display file information
-        function displayFileInfo(data) {
-            // Show preview
-            const previewContent = document.getElementById('previewContent');
+        // Handle DOC file upload
+        async function handleDOCUpload(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.file_type === 'doc') {
+                    displayDOCInfo(result);
+                } else {
+                    alert('Error: ' + (result.error || 'Invalid file type. Please upload a DOC file.'));
+                }
+            } catch (error) {
+                alert('Error uploading DOC file: ' + error.message);
+            }
+        }
+
+        // Display CSV file information
+        function displayCSVInfo(data) {
+            const previewContent = document.getElementById('csvPreviewContent');
             previewContent.innerHTML = '';
             
+            // Handle CSV file - show contact preview
             data.preview.forEach(contact => {
                 const contactDiv = document.createElement('div');
                 contactDiv.className = 'border-bottom pb-2 mb-2';
@@ -466,7 +655,32 @@ Thanks a lot for your continued support 🙏
                 previewContent.appendChild(contactDiv);
             });
 
-            document.getElementById('fileInfo').style.display = 'block';
+            document.getElementById('csvFileInfo').style.display = 'block';
+            document.getElementById('csvNoFile').style.display = 'none';
+        }
+
+        // Display DOC file information
+        function displayDOCInfo(data) {
+            const previewContent = document.getElementById('docPreviewContent');
+            previewContent.innerHTML = '';
+            
+            // Handle DOC file - populate email body
+            const emailBody = document.getElementById('emailBody');
+            emailBody.value = data.content;
+            emailBody.style.color = '#000';
+            emailBody.style.fontStyle = 'normal';
+            emailBody.style.backgroundColor = '#fff';
+            emailBody.style.borderColor = '#ced4da';
+            
+            previewContent.innerHTML = `
+                <div class="alert alert-success">
+                    <i class="fas fa-file-word"></i> DOC file loaded successfully!
+                    <br><small class="text-muted">Email body has been updated with the content from your DOC file.</small>
+                </div>
+            `;
+
+            document.getElementById('docFileInfo').style.display = 'block';
+            document.getElementById('docNoFile').style.display = 'none';
         }
 
 

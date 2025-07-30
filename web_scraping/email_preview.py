@@ -28,10 +28,7 @@ Would deeply appreciate if you could connect us with any angels who can bring pa
 
 Will send over our updated vision slide + demo videos right after this — feel free to forward them!
 
-Thanks a lot for your continued support 🙏
-
-{sender_name}
-{company_name}"""
+Thanks a lot for your continued support 🙏"""
     
     print(f"📧 Email Preview - Company to Client")
     print(f"📁 File: {csv_file}")
