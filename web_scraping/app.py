@@ -60,7 +60,7 @@ def log_message(message, level='info'):
     if len(campaign_status['logs']) > 50:
         campaign_status['logs'] = campaign_status['logs'][-50:]
 
-def send_campaign_emails(csv_file, template_name, custom_subject, custom_body, business_description="", company_name="", sender_name="", phone_number="", website=""):
+def send_campaign_emails(csv_file, custom_subject, custom_body):
     """Send campaign emails in background thread"""
     global campaign_status
     
@@ -81,7 +81,6 @@ def send_campaign_emails(csv_file, template_name, custom_subject, custom_body, b
         # Get credentials
         sender_password = os.getenv('GMAIL_APP_PASSWORD')
         sender_email = os.getenv('SENDER_EMAIL', 'hello@nolon.ai')
-        sender_name = os.getenv('SENDER_NAME', 'Raushan')
         
         if not sender_password:
             log_message("Gmail App Password not found in .env file", 'error')
@@ -96,28 +95,25 @@ def send_campaign_emails(csv_file, template_name, custom_subject, custom_body, b
                 
             email = contact.get('email', '').strip()
             name = contact.get('name', 'there').strip()
-            store_name = contact.get('store_name', 'your service center').strip()
+            sender_name = contact.get('sender_name', 'Raushan').strip()  # Get from Excel file
             
-            # Create subject and body with custom template and business info
-            subject = custom_subject.format(
-                name=name,
-                store_name=store_name,
-                sender_name=sender_name,
-                business_description=business_description,
-                company_name=company_name,
-                phone_number=phone_number,
-                website=website
-            )
-            
-            body = custom_body.format(
-                name=name,
-                store_name=store_name,
-                sender_name=sender_name,
-                business_description=business_description,
-                company_name=company_name,
-                phone_number=phone_number,
-                website=website
-            )
+            # Create subject and body with custom template
+            try:
+                subject = custom_subject.format(
+                    name=name,
+                    sender_name=sender_name,
+                    company_name="Nolon AI"
+                )
+                
+                body = custom_body.format(
+                    name=name,
+                    sender_name=sender_name,
+                    company_name="Nolon AI"
+                )
+            except KeyError as e:
+                log_message(f"Template placeholder error: {e}", 'error')
+                campaign_status['failed'] += 1
+                continue
             
             campaign_status['current_email'] = email
             campaign_status['progress'] = (i / len(contacts)) * 100
@@ -171,7 +167,7 @@ def upload_file():
                 reader = csv.DictReader(f)
                 contacts = list(reader)
                 
-            preview = contacts[:5] if len(contacts) > 5 else contacts
+            preview = contacts  # Show all contacts
             
             return jsonify({
                 'success': True,
@@ -185,15 +181,7 @@ def upload_file():
     
     return jsonify({'error': 'Invalid file type'}), 400
 
-@app.route('/templates')
-def get_templates():
-    """Get available email templates"""
-    templates = {
-        'kirby_partnership': get_template('kirby_partnership'),
-        'kirby_networking': get_template('kirby_networking'),
-        'kirby_business_development': get_template('kirby_business_development')
-    }
-    return jsonify(templates)
+
 
 @app.route('/start_campaign', methods=['POST'])
 def start_campaign():
@@ -204,14 +192,8 @@ def start_campaign():
         return jsonify({'error': 'Campaign already running'}), 400
     
     csv_file = os.path.join(app.config['UPLOAD_FOLDER'], data['filename'])
-    template_name = data.get('template_name', 'kirby_partnership')
     custom_subject = data.get('custom_subject', '')
     custom_body = data.get('custom_body', '')
-    business_description = data.get('business_description', '')
-    company_name = data.get('company_name', '')
-    sender_name = data.get('sender_name', '')
-    phone_number = data.get('phone_number', '')
-    website = data.get('website', '')
     
     if not os.path.exists(csv_file):
         return jsonify({'error': 'CSV file not found'}), 400
@@ -219,7 +201,7 @@ def start_campaign():
     # Start campaign in background thread
     thread = threading.Thread(
         target=send_campaign_emails,
-        args=(csv_file, template_name, custom_subject, custom_body, business_description, company_name, sender_name, phone_number, website)
+        args=(csv_file, custom_subject, custom_body)
     )
     thread.daemon = True
     thread.start()

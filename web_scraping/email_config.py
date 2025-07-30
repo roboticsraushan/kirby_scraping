@@ -108,6 +108,33 @@ Phone: {phone_number}
 Website: {website}
         """,
         "variables": ["name", "store_name", "sender_name", "business_description", "company_name", "phone_number", "website"]
+    },
+    
+    "angel_outreach": {
+        "subject": "Angel Investment Opportunity - {company_name} Update",
+        "template": """
+Hi {name},
+
+A quick update from our side, and all of this has happened just in the last few weeks: 
+
+• Company is officially incorporated 
+• We've finalized a live+work villa setup in Bangalore, [work-eat-sleep-repeat]
+• Team's in motion: 4 interns onboarded, 2 full-time engineers joining soon
+• Procurement for key hardware is underway
+• MVP will be ready in 2 months[week-wise dev plan ready with contingency], and we kick off our first real-world pilot in Month 3 (in Bangalore), in a banglore it company washroom 
+
+We're raising a ₹1.5–2 Cr angel round, got some commitment already, with ₹20L as minimum cheque size.
+
+Would deeply appreciate if you could connect us with any angels who can bring patient capital to back a deeptech startup from India, for the world.
+
+Will send over our updated vision slide + demo videos right after this — feel free to forward them!
+
+Thanks a lot for your continued support 🙏
+
+{sender_name}
+({company_name})
+        """,
+        "variables": ["name", "sender_name", "company_name"]
     }
 }
 
